@@ -1,0 +1,32 @@
+.login {
+  padding:2em;
+  border:1px solid grey;
+  margin:auto;
+  width:300px;
+}
+
+label{
+  display:block;
+  text-align: left;
+}
+.field > .error {
+  font-size: .8em;
+  color:red;
+  text-align: center;
+}
+.field{
+  margin-top:1em;
+}
+.field > input{
+  border:1px solid black;
+  width:100%;
+}
+
+.field > button {
+  display:block;
+  margin:auto;
+  border-radius: 0.5em;
+  padding: 1em;
+  border:1px solid grey;
+  width:50%;
+}
