@@ -127,6 +127,7 @@ class Login extends Component {
     const auth = firebase.auth();
     const promise = auth.signInWithEmailAndPassword(this.state.email, this.state.password);
     promise.catch(() => {
+        //We don't reveal if the email or the password is wrong to avoid easing brute force attacks
         this.setState({ form_error: this.errors.auth_error});
     });
   }
