@@ -4,19 +4,49 @@ import "./Login.css";
 class Login extends Component {
   constructor(props) {
     super(props);
+    this.errors = {
+      empty_email: "El Correo Electrónico no puede estar vacio.",
+      invalid_email: "El Correo Electrónico es invalido.",
+      empty_password: "La Contraseña no puede estar vacia.",
+    };
 
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      email_error: "",
+      password_error: "",
     };
+    
+    this.handleEmailChange = this.handleEmailChange.bind(this);
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  
   }
 
   render() {
     return (
       <div className="login">
-        <Email />
-        <Password />
+        <div className="field">
+          <label htmlFor="email">Correo Electrónico:</label>
+          <input
+            name="email"
+            type="email"
+            value={this.state.email}
+            placeholder="nombre@ejemplo.com"
+            onChange={this.handleEmailChange}
+          />
+          <div className="error">{this.state.email_error}</div>
+        </div>
+        <div className="field">
+          <label htmlFor="password">Contraseña:</label>
+          <input
+            name="password"
+            type="password"
+            value={this.state.password}
+            onChange={this.handlePasswordChange}
+          />
+          <div className="error">{this.state.password_error}</div>
+        </div>
         <div className="field">
           <button onClick={this.handleSubmit}>Acceder</button>
         </div>
@@ -24,60 +54,35 @@ class Login extends Component {
     );
   }
 
-  handleSubmit() {
-    alert(this.state.email);
-  }
-}
+  handleEmailChange(event) {
+    const email = event.target.value; //We use a local copy because state doesn't propagate instantly
+    this.setState({ email }); //We use the new ES6 function to create dynamic objects automagically
 
-class Email extends Component {
-  constructor(props) {
-    super(props);
-
-    this.errors = {
-      empty: "El Correo Electrónico no puede estar vacio.",
-      invalid: "El Correo Electrónico es invalido."
-    };
-
-    this.state = {
-      value: "",
-      error: ""
-    };
-
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  render() {
-    return (
-      <div className="field">
-        <label htmlFor="email">Correo Electrónico:</label>
-        <input
-          name="email"
-          type="email"
-          value={this.state.email}
-          placeholder="nombre@ejemplo.com"
-          onChange={this.handleChange}
-        />
-        <div className="error">{this.state.error}</div>
-      </div>
-    );
-  }
-
-  handleChange(event) {
-    const value = event.target.value; //We use a local copy because state doesn't propagate instantly
-    this.setState({ value }); //We use the new ES6 function to create dynamic objects automagically
-
-    if (value.length <= 0) {
+    if (email.length <= 0) {
       this.setState({
-        error: this.errors.empty
+        error: this.errors.empty_email
       });
-    } else if (!this.validateEmail(value)) {
+    } else if (!this.validateEmail(email)) {
       this.setState({
-        error: this.errors.invalid
+        email_error: this.errors.invalid_email
       });
     } else {
       this.setState({
-        error: ""
+        email_error: ""
       });
+    }
+  }
+
+
+
+  handlePasswordChange(event) {
+    const password = event.target.value; //We use a local copy because state doesn't propagate instantly
+    this.setState({password}); //We use the new ES6 function to create dynamic objects automagically
+
+    if (password.length <= 0) {
+      this.setState({ password_error: this.errors.empty_password });
+    } else {
+      this.setState({ password_error: "" });
     }
   }
 
@@ -85,40 +90,9 @@ class Email extends Component {
     const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
   }
-}
 
-class Password extends Component {
-  constructor(props) {
-    super(props);
-    this.errors = { empty: "La Contraseña no puede estar vacia." };
-
-    this.state = {
-      value: "",
-      error: ""
-    };
-
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  render() {
-    return (
-      <div className="field">
-        <label htmlFor="password">Contraseña:</label>
-        <input name="password" type="password" value={this.state.value} onChange={this.handleChange}/>
-        <div className="error">{this.state.error}</div>
-      </div>
-    );
-  }
-
-  handleChange(event) {
-
-    const value = event.target.value; //We use a local copy because state doesn't propagate instantly
-    this.setState({ value }); //We use the new ES6 function to create dynamic objects automagically
-    if (value.length <= 0) {
-      this.setState({
-        error: this.errors.empty
-      });
-    } 
+  handleSubmit() {
+    console.log(this.state.email);
   }
 }
 
