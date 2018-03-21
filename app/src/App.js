@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import "./App.css";
 import Login from "./Login";
+import NewPost from "./NewPost";
+import TimeLine from "./TimeLine";
 import firebase from "firebase";
 
 class App extends Component {
@@ -20,14 +22,23 @@ class App extends Component {
       }
     });
   }
+  
   render() {
     if (this.state.user) {
-      console.log(this.state.user);
-
       return (
         <div className="App">
-          <h1>Welcome {this.state.user.email}!</h1>
-          <input type="button" onClick={()=>{firebase.auth().signOut()}} value="Logout" />
+          <div className="header">
+            Welcome {this.state.user.email}!
+            <input
+              type="button"
+              onClick={() => {
+                firebase.auth().signOut();
+              }}
+              value="Logout"
+            />
+          </div>
+          <NewPost />
+          <TimeLine />
         </div>
       );
     } else {

@@ -1,5 +1,10 @@
 body {
-  padding-top: 3em;
   margin:auto;
-  max-width: 1024px;
+  margin-top: 1em;
+  max-width: 640px;
+}
+
+.header > input {
+  display: block;
+  float:right;
 }

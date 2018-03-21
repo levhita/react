@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import bcryptjs from "bcryptjs";
 import "./Login.css";
 import firebase from "firebase";
 
