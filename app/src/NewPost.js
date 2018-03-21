@@ -26,8 +26,7 @@ class NewPost extends Component {
             <option value="private">Amigos</option>
             <option value="public">Público</option>
           </select>
-          <div className="error">{this.state.error}</div>
-          <input disabled={this.state.value<=0?"disabled":""} type="button" onClick={this.handleSubmit} value="Publicar"/>
+          <input disabled={ (this.state.value.toString().length<3)?"disabled":"" } type="button" onClick={this.handleSubmit} value="Publicar"/>
         </div>
       </div>
     );
