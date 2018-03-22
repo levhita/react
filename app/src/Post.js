@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-//import "./Post.css";
+import "./Post.css";
+import nl2br from "react-nl2br";
 
 class Post extends Component {
   constructor(props) {
@@ -11,7 +12,9 @@ class Post extends Component {
       privacy: post.private ? "Amigos" : "Público",
       timestamp: post.timestamp,
       text: post.text,
-      date: date.toLocaleString()
+      date: date.toLocaleString(),
+      email: this.props.user.email,
+      isOwner: this.props.isOwner
     };
   }
 
@@ -21,7 +24,12 @@ class Post extends Component {
         <div>
           <div className="date">{this.state.date}</div>
           <div className="privacy">{this.state.privacy}</div>
-          <div className="text">{this.state.text}</div>
+          <div className="text">{nl2br(this.state.text)}</div>
+          <div className="email">{this.state.email}</div>
+          { this.state.isOwner 
+            ? <div className="buttons">buttons</div> 
+            : ''
+          }
         </div>
       </div>
     );

@@ -1,22 +1,29 @@
 import React, { Component } from "react";
 import Post from "./Post";
-import "./Post.css";
+import "./TimeLine.css";
 import firebase from "firebase";
 
 class TimeLine extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
-      posts: []
+      posts: [],
+      users: []
     };
 
-    const db = firebase.database();
-    this.timelineRef = db.ref().child("timeline");
+    firebase.database().ref().child("users").once("value", snap => {
+      this.setState({ users:snap.val() });
+    });
 
-    this.timelineRef.on("child_added", snap => {
+  }
+
+  componentDidMount(){
+    firebase.database().ref().child("timeline").on("child_added", snap => {
       let posts = this.state.posts;
-      posts.push(snap.val());
+      let post = snap.val();
+      post.key = snap.key;
+      posts.unshift(post);
       this.setState({ posts });
     });
   }
@@ -24,7 +31,16 @@ class TimeLine extends Component {
   render() {
     return (
       <div className="timeline">
-        {this.state.posts.map((post, i) => <Post key={i} post={post} />)}
+        {this.state.posts.map((post, i) => {
+          return (
+            <Post
+              key={post.key}
+              post={post}
+              isOwner={post.uid === this.props.user.uid}
+              user={this.state.users[post.uid]}
+            />
+          );
+        })}
       </div>
     );
   }

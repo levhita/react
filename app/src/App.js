@@ -10,13 +10,23 @@ class App extends Component {
     super();
 
     this.state = {
-      loggedIn: false,
       user: null
     };
 
     firebase.auth().onAuthStateChanged(User => {
       if (User) {
         this.setState({ user: User });
+        
+        /*
+        /* With this we create a reference of the auth users in the
+        /* database as they login, firebase doesn't provide an API to check auth users
+        */
+        
+        const usersRef = firebase.database().ref().child("users");
+        usersRef.child(User.uid).set({
+          email:User.email
+        });
+
       } else {
         this.setState({ user: null });
       }

@@ -18,3 +18,11 @@
   padding: 10px;
   clear:both;
 }
+.user {
+  float: left;
+  font-size: .8em;
+  color: grey;
+}
+.buttons {
+  float:right;
+}
