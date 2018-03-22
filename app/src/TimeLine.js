@@ -20,10 +20,16 @@ class TimeLine extends Component {
 
   componentDidMount(){
     firebase.database().ref().child("timeline").on("child_added", snap => {
-      let posts = this.state.posts;
+      let posts = this.state.posts.slice();
       let post = snap.val();
       post.key = snap.key;
       posts.unshift(post);
+      this.setState({ posts });
+    });
+
+    firebase.database().ref().child("timeline").on("child_removed", snap => {
+      let posts = this.state.posts.slice();
+      posts.splice(posts.findIndex( post => post.key === snap.key ),1);
       this.setState({ posts });
     });
   }
