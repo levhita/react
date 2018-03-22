@@ -51,7 +51,7 @@ class Login extends Component {
           <div className="error">{this.state.password_error}</div>
         </div>
         <div className="field">
-          <button onClick={this.handleSubmit}>Acceder</button>
+          <input type="button" disabled={this.isValid()?"":"disabled"} onClick={this.handleSubmit} value="Acceder"/>
           <div className="error">{this.state.form_error}</div>
         </div>
       </div>
@@ -61,74 +61,66 @@ class Login extends Component {
   handleEmailChange(event) {
     const email = event.target.value; //We use a local copy because state doesn't propagate instantly
     this.setState({ email }); //We use the new ES6 function to create dynamic objects automagically
-    this.validateEmail(email);
+    this.isValidEmail(email);
   }
 
   handlePasswordChange(event) {
     const password = event.target.value; //We use a local copy because state doesn't propagate instantly
     this.setState({ password }); //We use the new ES6 function to create dynamic objects automagically
-    this.validatePassword(password);
+    this.isValidPassword(password);
   }
 
-  validateEmail(email) {
+  isValidEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    let valid= true;
 
     if (email.length <= 0) {
-      this.setState({
-        email_error: this.errors.empty_email
-      });
-      valid = false;
+      this.setState({ email_error: this.errors.empty_email });
+      return false;
     } else if (!re.test(email)) {
-      this.setState({
-        email_error: this.errors.invalid_email
-      });
-      valid = false;
-    } else {
-      this.setState({
-        email_error: ""
-      });
+      this.setState({ email_error: this.errors.invalid_email });
+      return false;
     }
-    return valid;
+
+    this.setState({ email_error: "" });
+    return true;
   }
 
-  validatePassword(password) {
-    let valid = true;
-
+  isValidPassword(password) {
     if (password.length <= 0) {
-      this.setState({
-        password_error: this.errors.empty_password
-      });
-      valid = false;
-    } else {
-      this.setState({
-        password_error: ""
-      });
+      this.setState({ password_error: this.errors.empty_password });
+      return false;
     }
+    this.setState({ password_error: "" });
+    return true;
+  }
 
-    return valid;
+  isValid() {
+    return this.state.email_error === "" && this.state.password_error === "";
   }
 
   handleSubmit() {
-    let error = false;
-    if (!this.validateEmail(this.state.email)) {
-      this.setState({ form_error: this.errors.form_errors });
-      error = true;
+    let error_flag = false;
+
+    if (!this.isValidEmail(this.state.email)) {
+      error_flag = true;
     }
+
     //If we only have one condition with ||, the second validation(that also updates the UI, wouldn't trigger)
-    if (!this.validatePassword(this.state.password)) {
-      this.setState({ form_error: this.errors.form_errors});
-      error = true;
+    if (!this.isValidPassword(this.state.password)) {
+      error_flag = true;
     }
-    if (error) {
-      return;
+
+    if (error_flag) {
+      this.setState({ form_error: this.errors.form_errors });
     }
-    const auth = firebase.auth();
-    const promise = auth.signInWithEmailAndPassword(this.state.email, this.state.password);
-    promise.catch(() => {
+
+    const promise = firebase
+      .auth()
+      .signInWithEmailAndPassword(this.state.email, this.state.password)
+      .catch(() => {
         //We don't reveal if the email or the password is wrong to avoid easing brute force attacks
-        this.setState({ form_error: this.errors.auth_error});
-    });
+        this.setState({ form_error: this.errors.auth_error });
+      });
   }
 }
 

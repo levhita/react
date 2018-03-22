@@ -23,11 +23,22 @@ label{
   width:100%;
 }
 
-.field > button {
+.field > input[type="button"] {
   display:block;
   margin:auto;
   border-radius: 0.5em;
   padding: 1em;
   border:1px solid grey;
   width:50%;
+  color:white;
+  font-weight: bolder;
+  background-color: #AAA;
+}
+.field > input[type="button"]:hover {
+ background-color: #555;
+}
+
+.field > input[type="button"]:disabled {
+  background-color: #EEE;
+  color:#CCC;
 }
