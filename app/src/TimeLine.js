@@ -9,7 +9,8 @@ class TimeLine extends Component {
 
     this.state = {
       posts: [],
-      users: []
+      users: [],
+      current_user: null
     };
 
     firebase
@@ -17,7 +18,10 @@ class TimeLine extends Component {
       .ref()
       .child("users")
       .once("value", snap => {
-        this.setState({ users: snap.val() });
+        const users = snap.val();
+        const current_user = users[this.props.user.uid];
+        current_user.uid = this.props.user.uid;
+        this.setState({ users: users, current_user: current_user});
       });
   }
 
@@ -69,14 +73,22 @@ class TimeLine extends Component {
     return (
       <div className="timeline">
         {this.state.posts.map((post, i) => {
-          return (
-            <Post
-              key={post.key}
-              post={post}
-              isOwner={post.uid === this.props.user.uid}
-              user={this.state.users[post.uid]}
-            />
-          );
+          const friends = this.state.users[post.uid].friends || [];
+          if (
+            post.private == false || //Public posts always renders
+            post.uid===this.state.current_user.uid || // the current user owns the post
+            //If the user allowed this guy as a friend
+            friends.findIndex(friend =>friend===this.state.current_user.uid)>= 0 
+          ) {
+            return (
+              <Post
+                key={post.key}
+                post={post}
+                isOwner={post.uid === this.props.user.uid}
+                user={this.state.users[post.uid]}
+              />
+            );
+          }
         })}
       </div>
     );
