@@ -10,14 +10,17 @@ label{
   display:block;
   text-align: left;
 }
+
 .field > .error {
   font-size: .8em;
   color:red;
   text-align: center;
 }
+
 .field{
   margin-top:1em;
 }
+
 .field > input{
   border:1px solid black;
   width:100%;
@@ -34,6 +37,7 @@ label{
   font-weight: bolder;
   background-color: #AAA;
 }
+
 .field > input[type="button"]:hover {
  background-color: #555;
 }

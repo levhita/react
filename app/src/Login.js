@@ -51,7 +51,12 @@ class Login extends Component {
           <div className="error">{this.state.password_error}</div>
         </div>
         <div className="field">
-          <input type="button" disabled={this.isValid()?"":"disabled"} onClick={this.handleSubmit} value="Acceder"/>
+          <input
+            type="button"
+            disabled={this.isValid() ? "" : "disabled"}
+            onClick={this.handleSubmit}
+            value="Acceder"
+          />
           <div className="error">{this.state.form_error}</div>
         </div>
       </div>
@@ -114,7 +119,7 @@ class Login extends Component {
       this.setState({ form_error: this.errors.form_errors });
     }
 
-    const promise = firebase
+    firebase
       .auth()
       .signInWithEmailAndPassword(this.state.email, this.state.password)
       .catch(() => {

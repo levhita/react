@@ -28,7 +28,7 @@ class App extends Component {
       return (
         <div className="App">
           <div className="header">
-            Welcome {this.state.user.email}!
+            <strong>{this.state.user.email}</strong>
             <input
               type="button"
               onClick={() => {

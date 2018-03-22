@@ -1,0 +1,20 @@
+.privacy {
+  float:right;
+  font-size: .8em;
+  color: grey;
+}
+.date {
+  float:left;
+  font-size: .8em;
+  color: grey;
+}
+.post {
+  margin-top: 1em;
+  border:1px solid grey;
+  padding: 10px;
+  border-radius: 5px;
+}
+.text {
+  padding: 10px;
+  clear:both;
+}

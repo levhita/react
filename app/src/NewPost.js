@@ -3,17 +3,17 @@ import "./NewPost.css";
 import firebase from "firebase";
 
 class NewPost extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
-      value: "",
+      text: "",
       privacy: "private",
       disabled: "disabled"
     };
 
     const db = firebase.database();
-    this.timeline = db.ref().child("timeline");
+    this.timelineRef = db.ref().child("timeline");
 
     this.handleChange = this.handleChange.bind(this);
     this.handlePrivacyChange = this.handlePrivacyChange.bind(this);
@@ -23,10 +23,9 @@ class NewPost extends Component {
   render() {
     return (
       <div className="new_post">
-        <h1>Nueva Publicación</h1>
         <textarea
           onChange={this.handleChange}
-          value={this.state.value}
+          value={this.state.text}
           onKeyPress={event => {
             if (event.key === "Enter" && !event.shiftKey) {
               this.handleSubmit();
@@ -54,7 +53,7 @@ class NewPost extends Component {
   }
 
   handleChange(event) {
-    this.setState({ value: event.target.value });
+    this.setState({ text: event.target.value });
   }
 
   handlePrivacyChange(event) {
@@ -62,7 +61,8 @@ class NewPost extends Component {
   }
 
   isValid() {
-    return this.state.value.toString().trim().length > 2;
+	//We allow string up to 3 chars, like LOL and ALV
+    return this.state.text.toString().trim().length > 2;
   }
 
   handleSubmit() {
@@ -70,15 +70,17 @@ class NewPost extends Component {
       return;
     }
     //We don't want extra spaces in the DB.
-    const trimmed_value = this.state.value.toString().trim();
-    //A timestamp up to millisecons is always a good key, and doubles up as a date.
-    this.timeline.child(Date.now()).set({
+    const trimmed_text = this.state.text.toString().trim();
+    const key = this.timelineRef.push().key;
+    this.timelineRef.child(key).set({
       uid: this.props.user.uid,
       private: this.state.privacy === "private",
-      post: trimmed_value
+      text: trimmed_text,
+      timestamp: Date.now()
     });
 
-    this.setState({ value: "" });
+	//Reset Form to Empty
+    this.setState({ text: "" });
 
   }
 }
