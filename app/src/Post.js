@@ -26,7 +26,8 @@ class Post extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleEdit() {
+  handleEdit(e) {
+    e.preventDefault();
     this.setState({ isEditing: true, editedValue: this.state.text });
   }
   
@@ -34,7 +35,8 @@ class Post extends Component {
     this.setState({ editedValue: event.target.value });
   }
 
-  handleDelete() {
+  handleDelete(e) {
+    e.preventDefault();
     firebase
       .database()
       .ref()
@@ -42,7 +44,8 @@ class Post extends Component {
       .remove();
   }
 
-  handleSave() {
+  handleSave(e) {
+    e.preventDefault();
     const trimmed_text = this.state.editedValue.toString().trim();
     firebase
       .database()
@@ -52,8 +55,10 @@ class Post extends Component {
     this.setState({ isEditing: false, text: trimmed_text });
   }
 
-  handleCancel() {
+  handleCancel(e) {
+    e.preventDefault();
     this.setState({ isEditing: false });
+    
   }
 
   render() {
@@ -68,28 +73,24 @@ class Post extends Component {
                 onChange={this.handleChange}
                 value={this.state.editedValue}
               />
-              <input type="button" onClick={this.handleSave} value="Guardar" />
-              <input
-                type="button"
-                onClick={this.handleCancel}
-                value="Cancelar"
-              />
             </div>
           ) : (
             <div className="text">{nl2br(this.state.text)}</div>
           )}
           <div className="user">{this.state.email}</div>
-          {this.state.isOwner ? (
-            <div className="buttons">
-              <input type="button" onClick={this.handleEdit} value="Editar" />
-              <input
-                type="button"
-                onClick={this.handleDelete}
-                value="Eliminar"
-              />
+          {this.state.isOwner && !this.state.isEditing ? (
+            <div className="tools">
+              <a href="#" onClick={this.handleEdit}>Editar</a> |
+              | <a href="#" onClick={this.handleDelete}>Eliminar</a>
             </div>
           ) : null}
-          <br />
+          {this.state.isEditing ? (
+            <div className="tools">
+              <a href="#" onClick={this.handleSave}>Guardar</a> |
+              | <a href="#" onClick={this.handleCancel}>Cancelar</a>
+            </div>
+          ) : null}
+          <div className="clear"/>
         </div>
       </div>
     );
