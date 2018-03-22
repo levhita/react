@@ -22,7 +22,7 @@ class App extends Component {
       }
     });
   }
-  
+
   render() {
     if (this.state.user) {
       return (
@@ -37,8 +37,8 @@ class App extends Component {
               value="Logout"
             />
           </div>
-          <NewPost />
-          <TimeLine />
+          <NewPost user={this.state.user}/>
+          <TimeLine user={this.state.user}/>
         </div>
       );
     } else {
